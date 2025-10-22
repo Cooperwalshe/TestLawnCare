@@ -24,6 +24,11 @@
             border-color: #0A346A;
             box-shadow: 0 0 0 3px rgba(10, 52, 106, 0.3); /* Custom shadow for effect */
         }
+        /* Style for the estimated savings display */
+        .savings-box {
+            background-color: #f7f7f7;
+            border-left: 5px solid #0A346A;
+        }
     </style>
 </head>
 <body>
@@ -46,65 +51,145 @@
 
             <!-- Right Side: Lead Capture Form (High Contrast) -->
             <div id="form-container" class="bg-white p-8 sm:p-10 rounded-xl shadow-2xl border-t-4 border-secondary">
-                <h2 class="text-3xl font-bold text-center text-primary mb-6">
-                    Calculate Your Free Savings Estimate
-                </h2>
                 
-                <!-- 
-                    *** EMAIL HAS BEEN REPLACED WITH cwalshe21@gmail.com ***
-                -->
-                <form action="https://formsubmit.co/cwalshe21@gmail.com" method="POST" class="space-y-4">
-
-                    <!-- Honeypot field for spam prevention (DO NOT REMOVE) -->
-                    <input type="text" name="_honey" style="display:none">
-                    <!-- Disable Captcha (Recommended for Lead Forms) -->
-                    <input type="hidden" name="_captcha" value="false">
-
-                    <!-- Field 1: Zip Code -->
-                    <div>
-                        <label for="zip" class="block text-sm font-medium text-gray-700">1. Zip Code</label>
-                        <input type="text" id="zip" name="Zip Code" placeholder="Enter your Zip Code" required 
-                               class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
-                    </div>
+                <!-- 1. INPUT SCREEN (Initial View) -->
+                <div id="input-screen">
+                    <h2 class="text-3xl font-bold text-center text-primary mb-6">
+                        1. Calculate Your Free Savings Estimate
+                    </h2>
                     
-                    <!-- Field 2: Current Rate -->
-                    <div>
-                        <label for="current_rate" class="block text-sm font-medium text-gray-700">2. Current Mortgage Rate (%)</label>
-                        <input type="number" step="0.01" id="current_rate" name="Current Rate" placeholder="e.g., 6.5" required 
-                               class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                    <form id="estimate-form" class="space-y-4" onsubmit="calculateEstimate(event)">
+                        
+                        <!-- Field 1: Zip Code -->
+                        <div>
+                            <label for="zip" class="block text-sm font-medium text-gray-700">1. Zip Code</label>
+                            <input type="text" id="zip" name="Zip Code" placeholder="Enter your Zip Code" required 
+                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                        </div>
+                        
+                        <!-- Field 2: Current Rate -->
+                        <div>
+                            <label for="current_rate" class="block text-sm font-medium text-gray-700">2. Current Mortgage Rate (%)</label>
+                            <input type="number" step="0.01" id="current_rate" name="Current Rate" placeholder="e.g., 6.5" required 
+                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                        </div>
+
+                        <!-- Field 3: Loan Amount Left -->
+                        <div>
+                            <label for="loan_amount" class="block text-sm font-medium text-gray-700">3. Current Loan Amount Remaining</label>
+                            <input type="number" id="loan_amount" name="Loan Amount Remaining" placeholder="e.g., 350000" required 
+                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                        </div>
+
+                        <!-- Field 4: Credit Score Range -->
+                        <div>
+                            <label for="credit_score" class="block text-sm font-medium text-gray-700">4. Estimated Credit Score</label>
+                            <select id="credit_score" name="Credit Score Range" required 
+                                    class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 bg-white appearance-none text-gray-900">
+                                <option value="" disabled selected>Select Your Range</option>
+                                <option value="760">Excellent (760+)</option>
+                                <option value="700">Very Good (700-759)</option>
+                                <option value="670">Good (670-699)</option>
+                                <option value="620">Fair (620-669)</option>
+                            </select>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <div class="pt-4">
+                            <button type="submit" class="w-full color-secondary text-white font-bold py-3 rounded-lg shadow-xl hover:bg-red-700 transition duration-300 transform hover:scale-[1.01]">
+                                Calculate My Savings Estimate
+                            </button>
+                        </div>
+                        <p class="text-center text-xs pt-2 text-gray-500">
+                            No SSN required to calculate your initial savings.
+                        </p>
+                    </form>
+                </div>
+
+
+                <!-- 2. RESULTS SCREEN (Hidden until calculation) -->
+                <div id="results-screen" class="hidden">
+                    <h2 class="text-3xl font-bold text-center text-primary mb-6">
+                        2. Your Estimated Savings
+                    </h2>
+
+                    <div class="savings-box p-6 rounded-lg shadow-md mb-6">
+                        <p class="text-lg font-semibold text-gray-700 mb-2">Based on our wholesale rates, your estimated savings are:</p>
+                        <p class="text-5xl font-extrabold text-secondary text-center" id="estimated-savings-display">$XXX.XX</p>
+                        <p class="text-sm text-center text-gray-600 mt-1">ESTIMATED monthly savings</p>
                     </div>
 
-                    <!-- Field 3: Loan Amount Left -->
-                    <div>
-                        <label for="loan_amount" class="block text-sm font-medium text-gray-700">3. Current Loan Amount Remaining</label>
-                        <input type="number" id="loan_amount" name="Loan Amount Remaining" placeholder="e.g., $350000" required 
-                               class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
-                    </div>
+                    <p class="text-sm text-gray-700 mb-6 text-center" id="estimate-details">
+                        Your estimated new rate is X.XX% (vs. your current X.XX%). This is based on a 30-year term.
+                    </p>
 
-                    <!-- Field 4: Credit Score Range -->
-                    <div>
-                        <label for="credit_score" class="block text-sm font-medium text-gray-700">4. Estimated Credit Score</label>
-                        <select id="credit_score" name="Credit Score Range" required 
-                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 bg-white appearance-none text-gray-900">
-                            <option value="" disabled selected>Select Your Range</option>
-                            <option value="Excellent (760+)">Excellent (760+)</option>
-                            <option value="Very Good (700-759)">Very Good (700-759)</option>
-                            <option value="Good (670-699)">Good (670-699)</option>
-                            <option value="Fair (620-669)">Fair (620-669)</option>
-                        </select>
-                    </div>
-
-                    <!-- Final CTA Button (Red for Urgency) -->
-                    <div class="pt-4">
-                        <button type="submit" class="w-full color-secondary text-white font-bold py-3 rounded-lg shadow-xl hover:bg-red-700 transition duration-300 transform hover:scale-[1.01]">
-                            Get My Free Refinance Estimate
+                    <!-- Options -->
+                    <div class="space-y-4">
+                        <!-- Option 1: Continue to Contact -->
+                        <button onclick="showScreen('contact-screen')" class="w-full color-primary text-white font-bold py-3 rounded-lg shadow-xl hover:bg-blue-900 transition duration-300 transform hover:scale-[1.01]">
+                            Yes, I Want These Savings! (Continue to Contact)
+                        </button>
+                        <!-- Option 2: Recalculate -->
+                        <button onclick="showScreen('input-screen')" class="w-full bg-gray-200 text-gray-800 font-bold py-3 rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                            Recalculate or Change Input Values
                         </button>
                     </div>
+                </div>
 
-                    <p class="text-center text-xs pt-2 text-gray-500">
-                        No SSN required. Your data is secure and confidential.
+
+                <!-- 3. CONTACT SCREEN (Hidden until requested) -->
+                <div id="contact-screen" class="hidden">
+                    <h2 class="text-3xl font-bold text-center text-primary mb-6">
+                        3. Submit Contact Info
+                    </h2>
+                    <p class="text-center text-gray-700 mb-4">
+                        Fill in your details below so our broker network can lock in your estimated savings.
                     </p>
-                </form>
+
+                    <!-- 
+                        FINAL FORM SUBMISSION (Includes all calculated and inputted data)
+                    -->
+                    <form id="contact-form" action="https://formsubmit.co/cwalshe21@gmail.com" method="POST" class="space-y-4">
+                        
+                        <!-- Hidden fields to pass calculated data -->
+                        <input type="hidden" name="Source Screen" value="Mortgage Lead Funnel">
+                        <input type="hidden" name="_honey" style="display:none">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="Zip Code" id="hidden_zip">
+                        <input type="hidden" name="Current Rate" id="hidden_current_rate">
+                        <input type="hidden" name="Loan Amount Remaining" id="hidden_loan_amount">
+                        <input type="hidden" name="Credit Score Range" id="hidden_credit_score">
+                        <input type="hidden" name="Estimated New Rate" id="hidden_new_rate">
+                        <input type="hidden" name="Estimated Monthly Savings" id="hidden_monthly_savings">
+
+                        <!-- Visible Contact Fields -->
+                        <div>
+                            <label for="contact_name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="contact_name" name="Full Name" placeholder="John Doe" required 
+                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                        </div>
+                        <div>
+                            <label for="contact_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <input type="tel" id="contact_phone" name="Phone Number" placeholder="(555) 555-5555" required 
+                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                        </div>
+                        <div>
+                            <label for="contact_email" class="block text-sm font-medium text-gray-700">Email Address (Optional)</label>
+                            <input type="email" id="contact_email" name="Email Address" placeholder="you@example.com" 
+                                class="input-focus mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 transition duration-150 text-gray-900">
+                        </div>
+                        
+                        <!-- Final Submit Button -->
+                        <div class="pt-4">
+                            <button type="submit" class="w-full color-secondary text-white font-bold py-3 rounded-lg shadow-xl hover:bg-red-700 transition duration-300 transform hover:scale-[1.01]">
+                                Send My Info & Get My Estimate
+                            </button>
+                        </div>
+                        <p class="text-center text-xs pt-2 text-gray-500">
+                            By submitting, you agree to be contacted by Connect Mortgages.
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -128,7 +213,7 @@
     <section class="py-12 bg-white text-center">
         <h3 class="text-3xl font-bold text-secondary mb-3">Don't Wait for Rates to Spike.</h3>
         <p class="text-xl text-primary mb-6">Rates are still historically favorable. Get your free estimate now—it only takes 60 seconds.</p>
-        <a href="#form-container" class="color-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-900 transition duration-300 transform hover:scale-105 inline-block">
+        <a href="#form-container" onclick="showScreen('input-screen')" class="color-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-900 transition duration-300 transform hover:scale-105 inline-block">
             Start Saving Today
         </a>
     </section>
@@ -144,5 +229,87 @@
         </div>
     </footer>
 
+    <!-- JAVASCRIPT LOGIC FOR MULTI-STEP FUNNEL AND CALCULATION -->
+    <script>
+        const MIN_RATE = 3.5; // Floor for the estimated new rate
+        const LOAN_TERM_MONTHS = 360; // 30 years
+
+        // Utility function to calculate monthly mortgage payment (Principal, Annual Rate, Term in Months)
+        function calculateMonthlyPayment(P, R_annual, N_months) {
+            const R_monthly = (R_annual / 12) / 100;
+            if (R_monthly <= 0) return P / N_months; // Avoid division by zero
+            return P * (R_monthly * Math.pow(1 + R_monthly, N_months)) / (Math.pow(1 + R_monthly, N_months) - 1);
+        }
+
+        // Utility function to switch between the UI screens
+        function showScreen(screenId) {
+            document.getElementById('input-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('contact-screen').classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        // Main function to run the estimate calculation
+        function calculateEstimate(event) {
+            event.preventDefault(); // Stop the form from submitting immediately
+
+            // 1. Get input values
+            const zip = document.getElementById('zip').value;
+            const currentRate = parseFloat(document.getElementById('current_rate').value);
+            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+            const creditScoreGroup = document.getElementById('credit_score').value;
+
+            if (!currentRate || !loanAmount || isNaN(currentRate) || isNaN(loanAmount)) {
+                alert('Please enter valid numbers for Rate and Loan Amount.');
+                return;
+            }
+
+            // 2. Determine estimated new rate reduction based on credit score
+            let rateReduction = 0;
+            const score = parseInt(creditScoreGroup);
+
+            if (score >= 760) {
+                rateReduction = 2.5; // Excellent
+            } else if (score >= 700) {
+                rateReduction = 2.0; // Very Good
+            } else if (score >= 670) {
+                rateReduction = 1.5; // Good
+            } else if (score >= 620) {
+                rateReduction = 1.0; // Fair
+            }
+
+            let newRate = currentRate - rateReduction;
+            
+            // Ensure the simulated rate is not unrealistically low
+            if (newRate < MIN_RATE) {
+                newRate = MIN_RATE;
+            }
+
+            // 3. Calculate payments
+            const oldPayment = calculateMonthlyPayment(loanAmount, currentRate, LOAN_TERM_MONTHS);
+            const newPayment = calculateMonthlyPayment(loanAmount, newRate, LOAN_TERM_MONTHS);
+            const monthlySavings = oldPayment - newPayment;
+
+            // 4. Update the Results Screen
+            const savingsText = '$' + monthlySavings.toFixed(2);
+            document.getElementById('estimated-savings-display').innerText = savingsText;
+            document.getElementById('estimate-details').innerHTML = 
+                `Your estimated new rate is <strong class="text-primary">${newRate.toFixed(2)}%</strong> (vs. your current ${currentRate.toFixed(2)}%).`;
+
+            // 5. Populate hidden fields for final submission
+            document.getElementById('hidden_zip').value = zip;
+            document.getElementById('hidden_current_rate').value = currentRate.toFixed(2) + '%';
+            document.getElementById('hidden_loan_amount').value = '$' + loanAmount.toLocaleString();
+            document.getElementById('hidden_credit_score').value = document.getElementById('credit_score').options[document.getElementById('credit_score').selectedIndex].text;
+            document.getElementById('hidden_new_rate').value = newRate.toFixed(2) + '%';
+            document.getElementById('hidden_monthly_savings').value = savingsText;
+
+            // 6. Show the results screen
+            showScreen('results-screen');
+        }
+
+        // Initialize the first screen on load (optional, but good practice)
+        window.onload = () => showScreen('input-screen');
+    </script>
 </body>
 </html>
