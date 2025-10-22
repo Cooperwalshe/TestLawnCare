@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annapolis Veteran-Owned Lawn Care</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for Inter font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7; /* Light background for contrast */
+        }
+        /* Custom Vibe Color Palette (Red, White, and Blue) */
+        .color-primary { background-color: #0A346A; } /* Deep Navy Blue */
+        .text-primary { color: #0A346A; }
+        .color-secondary { background-color: #CC0000; } /* Classic Red Accent */
+        .text-secondary { color: #CC0000; }
+        /* Focus colors for input fields (using Red accent) */
+        .focus-red:focus {
+            --tw-ring-color: #CC0000; /* Classic Red */
+            --tw-border-color: #CC0000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Hero Section - [NAVY BLUE] -->
+    <section class="color-primary text-white py-16 sm:py-24 shadow-xl">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <!-- Accent color is RED -->
+            <p class="text-sm font-semibold uppercase tracking-widest text-secondary mb-3">
+                Veteran-Owned & Operated • Serving Annapolis, MD
+            </p>
+            <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 leading-tight">
+                Honoring Service.<br>Delivering Excellence.
+            </h1>
+            <p class="mt-6 text-xl text-gray-200 max-w-3xl mx-auto">
+                Bringing military discipline and excellence to your yard. We handle the labor, you enjoy the results.
+            </p>
+            <div class="mt-10">
+                <!-- Button now uses the RED accent color -->
+                <a href="#contact" class="color-secondary text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 inline-block">
+                    Get a Free, Instant Quote
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section - [WHITE] -->
+    <section class="py-16 sm:py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <!-- Header uses the NAVY BLUE primary color -->
+            <h2 class="text-4xl font-bold text-center text-primary mb-12">Services Built with Discipline</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Service Card 1: Uses Red accent for icon and border -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-t-4 border-secondary">
+                    <div class="text-4xl text-secondary mb-4">🌱</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-800">Mowing & Edging</h3>
+                    <p class="text-gray-600">Perfectly striped lawns and crisp edges every single visit. We treat your grass like it's ours.</p>
+                </div>
+
+                <!-- Service Card 2: Uses Red accent for icon and border -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-t-4 border-secondary">
+                    <div class="text-4xl text-secondary mb-4">🌿</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-800">Weed & Feed</h3>
+                    <p class="text-gray-600">Strategic fertilization and targeted weed control to ensure a lush, deep-green, healthy lawn.</p>
+                </div>
+
+                <!-- Service Card 3: Uses Red accent for icon and border -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-t-4 border-secondary">
+                    <div class="text-4xl text-secondary mb-4">🍂</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-800">Seasonal Cleanup</h3>
+                    <p class="text-gray-600">Comprehensive leaf removal, debris cleanup, and winter/spring prep for year-round beauty.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Banner - [RED & BLUE ON WHITE] -->
+    <section class="py-12 bg-white text-center shadow-inner border-y-4 border-secondary">
+        <div class="max-w-4xl mx-auto px-6">
+            <h3 class="text-3xl font-bold mb-3 text-secondary">Ready for a Yard That Commands Attention?</h3>
+            <p class="text-xl font-medium mb-6 text-primary">Stop sacrificing your weekends and trust a local veteran team.</p>
+            <!-- Button uses Navy Blue background -->
+            <a href="#contact" class="color-primary text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-900 transition duration-300">
+                Contact Us Now
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Contact Form Section - [WHITE] -->
+    <section id="contact" class="py-16 sm:py-24 bg-white">
+        <div class="max-w-xl mx-auto px-6">
+            <!-- Header uses Navy Blue primary color -->
+            <h2 class="text-4xl font-bold text-center text-primary mb-10">Request a Fast Quote</h2>
+            
+            <form class="space-y-6 bg-gray-50 p-8 rounded-xl shadow-2xl border-2 border-primary">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <!-- Inputs use RED focus ring -->
+                    <input type="text" id="name" name="name" placeholder="John Doe" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus-red focus:border-red-500 transition duration-150">
+                </div>
+                
+                <div>
+                    <label for="address" class="block text-sm font-medium text-gray-700">Service Address (Annapolis Area)</label>
+                    <!-- Inputs use RED focus ring -->
+                    <input type="text" id="address" name="address" placeholder="123 Main St, Annapolis" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus-red focus:border-red-500 transition duration-150">
+                </div>
+
+                <div>
+                    <label for="service" class="block text-sm font-medium text-gray-700">What services are you interested in?</label>
+                    <!-- Inputs use RED focus ring -->
+                    <textarea id="service" name="service" rows="4" placeholder="Weekly mowing, spring cleanup, and hedge trimming..." class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus-red focus:border-red-500 transition duration-150"></textarea>
+                </div>
+
+                <div>
+                    <!-- The submit button uses NAVY BLUE primary color and a darker Navy hover state -->
+                    <button type="submit" class="w-full color-primary text-white font-bold py-3 rounded-lg shadow-xl hover:bg-blue-900 transition duration-300 transform hover:scale-[1.01]">
+                        Submit My Quote Request
+                    </button>
+                    <p class="text-center text-xs mt-3 text-gray-500">
+                        *We aim to reply with a quote within 2 hours during business hours.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer - [NAVY BLUE] -->
+    <footer class="color-primary text-gray-300 py-8">
+        <div class="max-w-6xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2024 [Your Company Name]. All rights reserved. | Veteran-Owned & Operated.</p>
+            <p class="mt-2">
+                Call/Text: (000) 000-0000 | Email: your.email@example.com
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
